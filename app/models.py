@@ -23,14 +23,6 @@ class SensorValue(Base):
     value = Column(Float)
     created_at = Column(String, default=datetime.utcnow())
 
-    # def __repr__(self):
-    #     return [
-    #         {"sensor_id": self.id},
-    #         {"sensor_value": self.value},
-    #         {"sensor_name": self.name_sensor},
-    #         {"created_sensor": self.created_at}
-    #     ]
-
 
 class SensorName(Base):
     __tablename__ = "sensors_names"
