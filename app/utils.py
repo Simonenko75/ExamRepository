@@ -1,3 +1,7 @@
+from sqlalchemy import delete
+
+from app.models import SensorValue, SensorName
+
 
 def return_values(sensor_id, sensor_one, sensor_two):
     return {
@@ -32,4 +36,23 @@ def item_list(stmt1, stmt2, number, database):
     return items_list
 
 
+def delete_first_sensor(stmt1, database):
+    ld = [elem.id for elem in database.scalars(stmt1)]
 
+    sensor_id = database.query(SensorValue).filter(SensorValue.id == ld[0]).one_or_none()
+    stmt = (
+        delete(SensorValue)
+        .where(SensorValue.id == sensor_id.id)
+        .execution_options(synchronize_session="fetch")
+    )
+
+    sensor = database.query(SensorName).filter(SensorName.user_id == sensor_id.id).one_or_none()
+    stmt1 = (
+        delete(SensorName)
+        .where(SensorName.id == sensor.id)
+        .execution_options(synchronize_session="fetch")
+    )
+
+    database.execute(stmt)
+    database.execute(stmt1)
+    database.commit()

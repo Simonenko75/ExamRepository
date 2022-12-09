@@ -5,7 +5,7 @@ from sqlalchemy import update, delete, select
 
 from app.forms import SensorForm
 from app.models import connect_db, SensorValue, SensorName
-from app.utils import return_values, item_list
+from app.utils import return_values, item_list, delete_first_sensor
 
 router = APIRouter()
 
@@ -42,7 +42,12 @@ def create_senior(number: int, sensor: SensorForm = Body(..., ember=True), datab
     stmt1 = select(SensorValue)
     stmt2 = select(SensorName.name_sensor)
 
-    result = item_list(stmt1, stmt2, number, database)
+    try:
+        result = item_list(stmt1, stmt2, number, database)
+    except:
+        return "Too more date! No so one in this DB!"
+
+    delete_first_sensor(stmt1, database)
 
     return result
 
@@ -72,7 +77,12 @@ def update_sensor(sensor_id: int, number: int, sensor: SensorForm = Body(..., em
     stmt1 = select(SensorValue)
     stmt2 = select(SensorName.name_sensor)
 
-    result = item_list(stmt1, stmt2, number, database)
+    try:
+        result = item_list(stmt1, stmt2, number, database)
+    except:
+        return "Too more date! No so one in this DB!"
+
+    delete_first_sensor(stmt1, database)
 
     return result
 
