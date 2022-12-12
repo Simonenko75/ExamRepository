@@ -30,7 +30,7 @@ def item_list(stmt1, stmt2, number, database):
     lst_i = list(data_sensors.items())
 
     items_list = {}
-    for i in range(number * 4):
+    for i in range(number * 3):
         items_list[lst_i[i][0]] = lst_i[i][1]
 
     return items_list
